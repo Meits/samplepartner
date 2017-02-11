@@ -39,13 +39,18 @@
 								<td>{{$detail->product_id}}</td>
 								<td>{{$detail->product_name}}</td>
 								<td>{{$detail->product_price}}</td>
-								<td>{{$detail->original_product_price}}</td>
+								<td>{{$detail->total_price_tax_excl}}</td>
 								<td>{{$detail->product->category->name}}</td>
-								<td>{{$detail->product->category->discount->discount or 3}}%</td>
+								<td>{{$detail->product->category->discount->discount or 10}}%</td>
 								
 								
 								<?php
-								$summ = (($detail->product->category->discount->discount ) ?$detail->product->category->discount->discount * $detail->original_product_price : 3* $detail->original_product_price)/100;
+								if(is_object($detail->product->category->discount)) {
+									$summ = ($detail->product->category->discount->discount * $detail->total_price_tax_excl)/100;
+								}
+								else {
+									$summ =  (10 * $detail->total_price_tax_excl)/100;
+								}
 								$total += $summ;
 								?>
 								
@@ -59,9 +64,9 @@
 				<h3>Итого к выплате по заказу: {{$total}}</h3>
 				<h3>Статус оплаты партнеру: 
 				@if($order->orderPay && $order->orderPay->order_pay)
-					<span style="background-color: green">Оплочено</span>
+					<span style="background-color: green">Оплачено</span>
 				@else	
-					<span style="background-color: red">Не оплочено</span>	
+					<span style="background-color: red">Не оплачено</span>	
 				@endif
 				</h3>
 		@endif
