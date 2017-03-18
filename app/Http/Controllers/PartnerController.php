@@ -26,7 +26,27 @@ class PartnerController extends SiteController
     		return abort(403);
 			//return redirect('/')->with('message','У Вас нет прав для просмотра данного разхдела');
 		}
-    	$rules = Auth::user()->rules->load('orders','ruleName');
+		
+		if(Gate::allows('VIEW_ALL')) {
+			$rules = \App\CartRule::has('orders')->get()->load('orders','ruleName');
+			
+			$rules->transform(function($item, $key) {
+				$item->orders->load('orderPay');
+				
+				$item->orders->transform(function($item2, $key2) {
+					if(!$item2->hasOrderState(3)) {
+						return $item2;
+					}
+				});
+				return $item;
+			});
+		}
+		else {
+			$rules = Auth::user()->rules->load('orders','ruleName');
+		}
+		
+		
+    	
     	
     	//$sideBar = view(config('settings.theme').'.sideBar')->with(['users'=>$users,'cyties'=>$citys])->render();
 		

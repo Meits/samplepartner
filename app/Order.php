@@ -34,6 +34,14 @@ class Order extends Model
         return $this->belongsToMany('App\OrderState', 'order_history', 'id_order', 'id_order_state');
     }
     
+    public function hasOrderState($id)
+    {
+        //dump($this->orderState);
+        return $this->orderState->where('id_order_state',$id)->isEmpty() ? FALSE : TRUE;
+        
+        //return $this->belongsToMany('App\OrderState', 'order_history', 'id_order', 'id_order_state');
+    }
+    
     
     
 

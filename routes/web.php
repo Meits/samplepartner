@@ -27,3 +27,5 @@ Route::post('/comment',['uses'=>'CommentController@store','as'=>'comment-store']
 Route::post('/comment/edit/{comment}',['uses'=>'CommentController@update','as'=>'comment-update']);
 Route::get('/comment/delete/{comment}',['uses'=>'CommentController@destroy','as'=>'comment-delete']);
 
+Route::post('/partner/payStatus/update/{id}',['uses'=>'PaymentController@updateStatus','as'=>'updateStatus']);
+

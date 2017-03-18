@@ -14,7 +14,12 @@
 						<th>Почта</th>
 						<th>Сумма заказа</th>
 					</tbody>
+					@if(isset($rule->orders) && !empty($rule->orders))
+					
 					@foreach($rule->orders as $order)
+						@if(empty($order))
+							@continue
+						@endif
 						<tr>
 							
 							<td>{{ $order->id_order}}</td>
@@ -31,11 +36,25 @@
 								@endforeach
 							</td>
 							<td>{{ $order->customer->email}}</td>
-							<td>{{ $order->total_paid}}</td>
+							<td>{{ $order->total_paid}} &nbsp;&nbsp;&nbsp;
+							
+							@can('VIEW_ALL')
+								@if($order->orderPay && $order->orderPay->order_pay)
+									<span style="background-color: green">Оплачено</span>
+								@else	
+									<span style="background-color: red">Не оплачено</span>	
+								@endif
+							@endcan
+							
+							</td>
 							
 						</tr>
 						
 					@endforeach
+					
+					
+					@endif 
+					
 				</table>
 			@endforeach
 		@endif
